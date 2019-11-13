@@ -6,67 +6,79 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class TheGameManager:SingletonPersistant<TheGameManager> {
+public class TheGameManager : MonoBehaviour
+{
+    public Dictionary<int, Player> players = new Dictionary<int, Player>();
+    [HideInInspector]
+    public AudioManager audioManager;
 
-  public Dictionary<int, Player> players = new Dictionary<int, Player>();
+    public static TheGameManager Instance { get { return _instance; } }
 
-  [HideInInspector] public AudioManager audioManager;
+    private static TheGameManager _instance;
 
-  public enum GameMode {
-    None, SinglePlayer, CoOp, Competetive
-  }
-
-  public GameMode currentMode;
-  
-  public enum Difficulty {
-    Easy, Medium, Hard
-  }
-
-
-  public TheGameManager() { }
-
-  private bool hardMode;
-  
-  public override void Awake() {
-    base.Awake();
-    InitRequiredComponents();
-  }
-
-  private void Start() {
-
-    SceneManager.LoadScene("IntroScene");
-    currentMode = GameMode.None;
-  }
-
-  private void Update() {
-
-  }
-
-  public void LoadPlayerSetup(GameMode mode) {
-    if(mode == GameMode.SinglePlayer) {
-      currentMode = mode;
-      SceneManager.LoadScene("SinglePlayerSetup");
+    public enum GameMode
+    {
+        None, SinglePlayer, CoOp, Competetive
     }
-    else {
-      SceneManager.LoadScene("MultiplayerSetup");
+
+    public GameMode currentMode;
+
+    public TheGameManager() { }
+
+    public void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+
+
+        InitRequiredComponents();
     }
-  }
 
-  private void InitRequiredComponents() {
-    audioManager = GetComponent<AudioManager>();
-    if(audioManager == null) {
-      audioManager = gameObject.AddComponent<AudioManager>();
+    private void Start()
+    {
+        Cursor.visible = false;
+
+        SceneManager.LoadScene("PlayerAssign");
+        currentMode = GameMode.None;
     }
-  }
+
+    public void LoadPlayerSetup(GameMode mode)
+    {
+        if (mode == GameMode.SinglePlayer)
+        {
+            currentMode = mode;
+            SceneManager.LoadScene("SinglePlayerSetup");
+        }
+        else
+        {
+            SceneManager.LoadScene("MultiplayerSetup");
+        }
+    }
+
+    private void InitRequiredComponents()
+    {
+        audioManager = GetComponent<AudioManager>();
+        if (audioManager == null)
+        {
+            audioManager = gameObject.AddComponent<AudioManager>();
+        }
+    }
 
 
 
-  public void CreatePlayer(int controllerID, bool loadMainMenu) {
+    public void CreatePlayer(int controllerID, bool loadMainMenu)
+    {
 
-    players[1] = new Player(1,  controllerID);
-    players[2] = new Player(2, (controllerID == 1) ? 2 : 1);
+        players[1] = new Player(1, controllerID);
+        players[2] = new Player(2, (controllerID == 1) ? 2 : 1);
 
-    if(loadMainMenu) SceneManager.LoadScene("MainMenu");
-  }
+        if (loadMainMenu) SceneManager.LoadScene("MainMenu");
+    }
 }
 

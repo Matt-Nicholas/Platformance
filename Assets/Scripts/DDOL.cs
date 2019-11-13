@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DDOL : MonoBehaviour {
-
-  private void Awake() {
-    DontDestroyOnLoad(gameObject);
-  }
+public class DDOL : MonoBehaviour
+{
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 }

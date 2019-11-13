@@ -4,19 +4,27 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class MainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour
+{
 
-  TheGameManager GM = TheGameManager.Instance;
+    TheGameManager GM = TheGameManager.Instance;
 
-  public void SinglePlayerSelected() {
-    GM.LoadPlayerSetup(TheGameManager.GameMode.SinglePlayer);
-  }
+    public void SinglePlayerSelected()
+    {
+        GM.LoadPlayerSetup(TheGameManager.GameMode.SinglePlayer);
+    }
 
-  public void MultiplayerSelected() {
-    GM.LoadPlayerSetup(TheGameManager.GameMode.None);
-  }
+    public void VersusSelected()
+    {
+        GM.LoadPlayerSetup(TheGameManager.GameMode.None);
+    }
 
-  public void QuitSelected() {
-
-  }
+    public void QuitSelected()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+         Application.Quit();
+#endif
+    }
 }
