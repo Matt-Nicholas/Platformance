@@ -42,8 +42,10 @@ public class TheGameManager : MonoBehaviour
 
     private void Start()
     {
+#if !UNITY_EDITOR
         Cursor.visible = false;
-
+        Cursor.lockState = CursorLockMode.Locked;
+#endif
         SceneManager.LoadScene("PlayerAssign");
         currentMode = GameMode.None;
     }

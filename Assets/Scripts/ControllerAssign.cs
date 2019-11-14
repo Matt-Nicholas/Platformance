@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SetPlayerOneID : MonoBehaviour
+public class ControllerAssign : MonoBehaviour
 {
 
     private bool playerSet = false;
