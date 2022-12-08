@@ -9,23 +9,27 @@ EditorBuildSettings:
     path: Assets/Scenes/_preload.unity
     guid: 4fe0a9be801a57a40aeee80eb750eb93
   - enabled: 1
-    path: Assets/Scenes/IntroScene.unity
-    guid: d44293faf903d344b9cea979f16ed2d7
-  - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: 3243865dc0f6d844cb65c46456cc5e60
-  - enabled: 1
-    path: Assets/Scenes/Versus.unity
-    guid: 2964d89c485689540a204902214b4f19
+    path: Assets/Scenes/level 2.unity
+    guid: 37b7d11b585ffbd42982715d5837ace5
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 4345b86b770594c418e72e5ed2c66f13
   - enabled: 1
-    path: Assets/Scenes/level 2.unity
-    guid: 37b7d11b585ffbd42982715d5837ace5
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3243865dc0f6d844cb65c46456cc5e60
+  - enabled: 1
+    path: Assets/Scenes/MultiplayerSetup.unity
+    guid: aac7a98574241a04eb56e9aaf00884cb
+  - enabled: 1
+    path: Assets/Scenes/PlayerAssign.unity
+    guid: d44293faf903d344b9cea979f16ed2d7
+  - enabled: 1
+    path: Assets/Scenes/Scrolling.unity
+    guid: 12b729605e056a54791e5e0546468b34
   - enabled: 1
     path: Assets/Scenes/SinglePlayerSetup.unity
     guid: f03a2b0b17740834bac1e48c72cf234c
   - enabled: 1
-    path: Assets/Scenes/MultiplayerSetup.unity
-    guid: aac7a98574241a04eb56e9aaf00884cb
+    path: Assets/Scenes/Versus.unity
+    guid: 2964d89c485689540a204902214b4f19
+  m_configObjects: {}
