@@ -14,14 +14,14 @@ public class PlayerInput:MonoBehaviour {
     player = GetComponent<PlayerController>();
     if(transform.position.x < 15) {
       playerNumber = 1;
-      playerID = TheGameManager.Instance.players[1].controllerID;
+      playerID = TheGameManager.Instance.Players[1].controllerID;
     }
     else {
       playerNumber = 2;
-      playerID = TheGameManager.Instance.players[2].controllerID;
+      playerID = TheGameManager.Instance.Players[2].controllerID;
     }
 
-    transform.GetComponent<Renderer>().material.color = TheGameManager.Instance.players[playerNumber].Color;
+    transform.GetComponent<Renderer>().material.color = TheGameManager.Instance.Players[playerNumber].Color;
   }
 
   void Update() {

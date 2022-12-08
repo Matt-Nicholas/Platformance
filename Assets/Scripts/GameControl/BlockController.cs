@@ -9,7 +9,7 @@ public class BlockController : MonoBehaviour {
 	void Start () {
     PlayerInput player = GetComponent<PlayerInput>();
 
-    color = TheGameManager.Instance.players[player.playerNumber].Color;
+    color = TheGameManager.Instance.Players[player.playerNumber].Color;
 
   }
 
