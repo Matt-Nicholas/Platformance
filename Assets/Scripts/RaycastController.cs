@@ -1,60 +1,59 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class RaycastController:MonoBehaviour {
+public class RaycastController : MonoBehaviour
+{
+    public LayerMask collisionMask;
+    [HideInInspector] public int horizontalRayCount;
+    [HideInInspector] public int verticalRayCount;
+    [HideInInspector] public float horizontalRaySpacing;
+    [HideInInspector] public float verticalRaySpacing;
+    [HideInInspector] public BoxCollider2D m_Collider;
+    
+    protected RaycastOrigins _raycastOrigins;
+    protected const float _skinWidth = .015f;
+    
+    private const float _dstBetweenRays = .25f;
+    
+    public virtual void Awake()
+    {
+        m_Collider = GetComponent<BoxCollider2D>();
+    }
 
-  public LayerMask collisionMask;
+    public virtual void Start()
+    {
+        CalculateRaySpacing();
+    }
 
-  public const float skinWidth = .015f;
-  const float dstBetweenRays = .25f;
-  [HideInInspector]
-  public int horizontalRayCount;
-  [HideInInspector]
-  public int verticalRayCount;
+    protected void UpdateRaycastOrigins()
+    {
+        Bounds bounds = m_Collider.bounds;
+        bounds.Expand(_skinWidth * -2);
 
-  [HideInInspector]
-  public float horizontalRaySpacing;
-  [HideInInspector]
-  public float verticalRaySpacing;
+        _raycastOrigins.bottomLeft = new Vector2(bounds.min.x, bounds.min.y);
+        _raycastOrigins.bottomRight = new Vector2(bounds.max.x, bounds.min.y);
+        _raycastOrigins.topLeft = new Vector2(bounds.min.x, bounds.max.y);
+        _raycastOrigins.topRight = new Vector2(bounds.max.x, bounds.max.y);
+    }
 
-  [HideInInspector]
-  public BoxCollider2D m_Collider;
-  public RaycastOrigins raycastOrigins;
+    private void CalculateRaySpacing()
+    {
+        Bounds bounds = m_Collider.bounds;
+        bounds.Expand(_skinWidth * -2);
 
-  public virtual void Awake() {
-    m_Collider = GetComponent<BoxCollider2D>();
-  }
+        float boundsWidth = bounds.size.x;
+        float boundsHeight = bounds.size.y;
 
-  public virtual void Start() {
-    CalculateRaySpacing();
-  }
+        horizontalRayCount = Mathf.RoundToInt(boundsHeight / _dstBetweenRays);
+        verticalRayCount = Mathf.RoundToInt(boundsWidth / _dstBetweenRays);
 
-  public void UpdateRaycastOrigins() {
-    Bounds bounds = m_Collider.bounds;
-    bounds.Expand(skinWidth * -2);
+        horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
+        verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
+    }
 
-    raycastOrigins.bottomLeft = new Vector2(bounds.min.x, bounds.min.y);
-    raycastOrigins.bottomRight = new Vector2(bounds.max.x, bounds.min.y);
-    raycastOrigins.topLeft = new Vector2(bounds.min.x, bounds.max.y);
-    raycastOrigins.topRight = new Vector2(bounds.max.x, bounds.max.y);
-  }
-
-  public void CalculateRaySpacing() {
-    Bounds bounds = m_Collider.bounds;
-    bounds.Expand(skinWidth * -2);
-
-    float boundsWidth = bounds.size.x;
-    float boundsHeight = bounds.size.y;
-
-    horizontalRayCount = Mathf.RoundToInt(boundsHeight / dstBetweenRays);
-    verticalRayCount = Mathf.RoundToInt(boundsWidth / dstBetweenRays);
-
-    horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
-    verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
-  }
-
-  public struct RaycastOrigins {
-    public Vector2 topLeft, topRight;
-    public Vector2 bottomLeft, bottomRight;
-  }
+    protected struct RaycastOrigins
+    {
+        public Vector2 topLeft, topRight;
+        public Vector2 bottomLeft, bottomRight;
+    }
 }

@@ -1,37 +1,43 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(PlayerController))]
-public class PlayerInput:MonoBehaviour {
+public class PlayerInput : MonoBehaviour
+{
+    public int playerNumber;
+    public int playerID;
 
-  
-  public int playerNumber;
-  public int playerID;
+    private PlayerController _player;
 
-  PlayerController player;
+    void Start()
+    {
+        _player = GetComponent<PlayerController>();
+        if (transform.position.x < 15)
+        {
+            playerNumber = 1;
+            playerID = TheGameManager.Instance.Players[1].controllerID;
+        }
+        else
+        {
+            playerNumber = 2;
+            playerID = TheGameManager.Instance.Players[2].controllerID;
+        }
 
-  void Start() {
-    player = GetComponent<PlayerController>();
-    if(transform.position.x < 15) {
-      playerNumber = 1;
-      playerID = TheGameManager.Instance.Players[1].controllerID;
+        transform.GetComponent<Renderer>().material.color = TheGameManager.Instance.Players[playerNumber].Color;
     }
-    else {
-      playerNumber = 2;
-      playerID = TheGameManager.Instance.Players[2].controllerID;
-    }
 
-    transform.GetComponent<Renderer>().material.color = TheGameManager.Instance.Players[playerNumber].Color;
-  }
+    void Update()
+    {
+        _player.SetDirectionalInput(new Vector2(InputManager.MainHorizontal(playerID), InputManager.MainVertical(playerID)),
+            (InputManager.RightBumper(playerID) || InputManager.XButton(playerID)));
 
-  void Update() {
-    player.SetDirectionalInput(new Vector2(InputManager.MainHorizontal(playerID), InputManager.MainVertical(playerID)), InputManager.RightBumper(playerID));
+        if (InputManager.AButtonDown(playerID))
+        {
+            _player.OnJumpInputDown();
+        }
 
-    if(InputManager.AButtonDown(playerID)) { 
-      player.OnJumpInputDown();
+        if (InputManager.AButtonUp(playerID))
+        {
+            _player.OnJumpInputUp();
+        }
     }
-    if(InputManager.AButtonUp(playerID)) {
-      player.OnJumpInputUp();
-    }
-  }
 }
