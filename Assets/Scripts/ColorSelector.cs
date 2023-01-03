@@ -145,7 +145,7 @@ public class ColorSelector : MonoBehaviour
 
                 if (playerNumber == 1)
                 {
-                    SceneManager.LoadScene("Main");
+                    SceneManager.LoadScene("Prototyping");
                 }
             }
         }

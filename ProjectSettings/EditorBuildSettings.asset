@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Versus.unity
     guid: 2964d89c485689540a204902214b4f19
+  - enabled: 1
+    path: Assets/Scenes/Prototyping.unity
+    guid: 7879fdebd8570eb43bcc5c4a4bc2794a
   m_configObjects: {}

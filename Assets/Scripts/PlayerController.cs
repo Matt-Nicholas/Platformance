@@ -13,74 +13,72 @@ public class PlayerController : MonoBehaviour
     public Vector2 wallJumpOff;
     public Vector2 wallLeap;
 
-    private float _baseMoveSpeed = 8;
-    private float _boostMultiplier = 2.6f;
-    
-    private float accelerationTimeAirborne = .1f;
-    private float accelerationTimeGrounded = .1f;
-    
-    private float moveSpeed;
+    private readonly float _baseMoveSpeed = 8;
+    private readonly float _boostMultiplier = 2.6f;
 
-    private float wallUnstickCounter;
-    private float gravity;
-    private float maxJumpVelocity;
-    private float minJumpVelocity;
-    private Vector3 velocity;
-    private float velocityXSmoothing;
+    private readonly float accelerationTimeAirborne = .1f;
+    private readonly float accelerationTimeGrounded = .1f;
 
     private Controller2D controller;
 
     private Vector2 directionalInput;
-    private bool wallSliding;
-    private int wallDirX;
+    private float gravity;
     private bool isboosting;
+    private bool isInPhysicsVolume;
+    private float maxJumpVelocity;
+    private float minJumpVelocity;
 
+    private float moveSpeed;
+    private Vector2 physicsVolumeVelocity;
+    private Vector3 velocity;
+    private float velocityXSmoothing;
+    private int wallDirX;
+    private bool wallSliding;
+
+    private float wallUnstickCounter;
 
     private void Awake()
     {
         controller = GetComponent<Controller2D>();
     }
 
-    void Start()
+    private void Start()
     {
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
 
-        foreach (string s in Input.GetJoystickNames())
-        {
-            Debug.Log(s);
-        }
+        foreach (var s in Input.GetJoystickNames()) Debug.Log(s);
     }
 
-    void Update()
+    private void Update()
     {
         CalculateVelocity();
         HandleWallSliding();
+
+        if (isInPhysicsVolume) velocity.y = physicsVolumeVelocity.y;
 
         controller.Move(velocity * Time.deltaTime, directionalInput);
 
         if (controller.collisions.above || controller.collisions.below)
         {
             if (controller.collisions.slidingDownMaxSlope)
-            {
                 velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
-            }
             else
-            {
                 velocity.y = 0;
-            }
         }
     }
 
     public void SetDirectionalInput(Vector2 input, bool isboosting)
     {
-        moveSpeed = (isboosting) ? _baseMoveSpeed * _boostMultiplier : _baseMoveSpeed;
+        moveSpeed = isboosting ? _baseMoveSpeed * _boostMultiplier : _baseMoveSpeed;
         directionalInput = input;
     }
 
     public void OnJumpInputDown()
     {
+        if (isInPhysicsVolume)
+            return;
 
         if (wallSliding || ((controller.collisions.left || controller.collisions.right) &&
                             !controller.collisions.below && velocity.y != 0))
@@ -122,20 +120,23 @@ public class PlayerController : MonoBehaviour
 
     public void OnJumpInputUp()
     {
-        if (velocity.y > minJumpVelocity)
-        {
-            velocity.y = minJumpVelocity;
-        }
+        if (isInPhysicsVolume)
+            return;
+
+        if (velocity.y > minJumpVelocity) velocity.y = minJumpVelocity;
     }
 
-    bool SameSign(float num1, float num2)
+    private bool SameSign(float num1, float num2)
     {
-        return num1 >= 0 && num2 >= 0 || num1 < 0 && num2 < 0;
+        return (num1 >= 0 && num2 >= 0) || (num1 < 0 && num2 < 0);
     }
 
-    void HandleWallSliding()
+    private void HandleWallSliding()
     {
-        wallDirX = (controller.collisions.left) ? -1 : 1;
+        if (isInPhysicsVolume)
+            return;
+
+        wallDirX = controller.collisions.left ? -1 : 1;
         wallSliding = false;
         if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below &&
             velocity.y < 0)
@@ -143,10 +144,7 @@ public class PlayerController : MonoBehaviour
             wallSliding = true;
 
             // govern speed when sliding down a wall
-            if (velocity.y < -wallSlideSpeedMax)
-            {
-                velocity.y = -wallSlideSpeedMax;
-            }
+            if (velocity.y < -wallSlideSpeedMax) velocity.y = -wallSlideSpeedMax;
 
             // Don't let the player release from wall immediately in case they hit the joystick before the jump button
             if (wallUnstickCounter > 0)
@@ -154,15 +152,7 @@ public class PlayerController : MonoBehaviour
                 velocityXSmoothing = 0;
                 velocity.x = 0;
 
-                if (Mathf.Sign(directionalInput.x) != Mathf.Sign(wallDirX))
-                {
-                    //if(directionalInput.x != wallDirX && directionalInput.x != 0) {
-                    //timeToWallUnstick = 0;
-                    wallUnstickCounter -= Time.deltaTime;
-                }
-                //else {
-                //  timeToWallUnstick = wallStickTime;
-                //}
+                if (Mathf.Sign(directionalInput.x) != Mathf.Sign(wallDirX)) wallUnstickCounter -= Time.deltaTime;
             }
             else
             {
@@ -171,13 +161,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void CalculateVelocity()
+    public void EnterPhysicsVolume(Vector2 velocity)
     {
-        float targetVelocityX = directionalInput.x * moveSpeed;
-        
+        isInPhysicsVolume = true;
+        physicsVolumeVelocity = velocity;
+    }
+
+    public void ExitPhysicsVolume()
+    {
+        isInPhysicsVolume = false;
+    }
+
+    private void CalculateVelocity()
+    {
+        var targetVelocityX = directionalInput.x * moveSpeed;
+
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing,
-            (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-        
+            controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
+
         velocity.y += gravity * Time.deltaTime;
     }
 }
