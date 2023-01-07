@@ -2,31 +2,24 @@
 
 public class ControllerAssign : MonoBehaviour
 {
-    private bool playerSet = false;
-
-    void Start()
+    private void Awake()
     {
-
+        Game.Instance.OnPlayerJoinedGame += HandlePlayerJoined;
     }
 
-    void Update()
+    private void OnDestroy()
     {
+        Game.Instance.OnPlayerJoinedGame -= HandlePlayerJoined;
+    }
 
-        int i = 1;
+    private void Start()
+    {
+        Game.Instance.SetJoiningEnabled(true);
+    }
 
-        while (i < 3)
-        {
-            if (playerSet) break;
-
-            if (Input.GetButtonDown("A_Button" + i))
-            {
-
-                TheGameManager.Instance.CreatePlayer(i, true);
-                playerSet = true;
-
-                break;
-            }
-            i++;
-        }
+    private void HandlePlayerJoined(int playerIndex)
+    {
+        Game.Instance.SetJoiningEnabled(false);
+        Game.Instance.LoadMainMenu();
     }
 }

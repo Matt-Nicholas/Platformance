@@ -13,8 +13,10 @@ public class PlayerController : MonoBehaviour
     public Vector2 wallJumpOff;
     public Vector2 wallLeap;
 
-    private readonly float _baseMoveSpeed = 8;
-    private readonly float _boostMultiplier = 2.6f;
+    public bool PlayerCanMove;
+    
+    private readonly float _baseMoveSpeed = 10;
+    private readonly float _boostMultiplier = 1.9f;
 
     private readonly float accelerationTimeAirborne = .1f;
     private readonly float accelerationTimeGrounded = .1f;
@@ -34,9 +36,8 @@ public class PlayerController : MonoBehaviour
     private float velocityXSmoothing;
     private int wallDirX;
     private bool wallSliding;
-
     private float wallUnstickCounter;
-
+    
     private void Awake()
     {
         controller = GetComponent<Controller2D>();
@@ -47,12 +48,13 @@ public class PlayerController : MonoBehaviour
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
-
-        foreach (var s in Input.GetJoystickNames()) Debug.Log(s);
     }
 
     private void Update()
     {
+        if (!PlayerCanMove)
+            return;
+        
         CalculateVelocity();
         HandleWallSliding();
 
@@ -71,6 +73,9 @@ public class PlayerController : MonoBehaviour
 
     public void SetDirectionalInput(Vector2 input, bool isboosting)
     {
+        if (!PlayerCanMove)
+            return;
+        
         moveSpeed = isboosting ? _baseMoveSpeed * _boostMultiplier : _baseMoveSpeed;
         directionalInput = input;
     }

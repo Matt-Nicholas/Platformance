@@ -1,28 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class BlockController : MonoBehaviour {
+public class BlockController : MonoBehaviour
+{
+    private Player player;
 
-  Color color;
-
-	void Start () {
-    PlayerInput player = GetComponent<PlayerInput>();
-
-    color = TheGameManager.Instance.Players[player.playerNumber].Color;
-
-  }
-
-  void OnTriggerEnter2D(Collider2D other) {
-    if(other.tag.Equals("Block")) {
-      other.gameObject.SendMessage("Entered", color, SendMessageOptions.DontRequireReceiver);
+    private void Start()
+    {
+        player = GetComponent<Player>();
     }
-  }
 
-  void OnTriggerExit2D(Collider2D other) {
-    if(other.tag.Equals("Block")) {
-      other.gameObject.SendMessage("Exited", color, SendMessageOptions.DontRequireReceiver);
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag.Equals("Block"))
+            other.gameObject.SendMessage("Entered", player.Color, SendMessageOptions.DontRequireReceiver);
     }
-  }
 
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag.Equals("Block"))
+            other.gameObject.SendMessage("Exited", player.Color, SendMessageOptions.DontRequireReceiver);
+    }
 }

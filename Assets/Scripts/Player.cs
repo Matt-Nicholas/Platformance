@@ -1,25 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class Player {
+public class Player : MonoBehaviour
+{
+      public PlayerInput PlayerInput;
+      public PlayerInputHandler InputHandler;
+      public PlayerController Controller;
 
-  public int playerID;
-  public int controllerID;
-  private Color color;
+      [SerializeField] private GameObject _artParent;
+      [SerializeField] private SpriteRenderer _renderer;
+      
+      public Color Color { get; private set; }
+      
+      private void Awake()
+      {
+            SetVisible(false);
+      }
 
-  public Player(int playerID, int controllerID) {
-    this.playerID = playerID;
-    this.controllerID = controllerID;
-  }
+      public void SetControlsActive(bool active)
+      {
+            Controller.PlayerCanMove = active;
+      }
 
-  public Color Color {
-    get {
-      return color;
-    }
+      public void SetVisible(bool visible)
+      {
+            _artParent.SetActive(visible);
+      }
 
-    set {
-      color = value;
-    }
-  }
+      public void SetPosition(Vector2 pos)
+      { 
+            transform.position = pos;
+      }
+
+      public void SetActionMap(string map)
+      {
+            PlayerInput.SwitchCurrentActionMap(map);
+      }
+      
+      public void SetColor(Color color)
+      {
+            Color = color;
+            _renderer.color = Color;
+      }
 }

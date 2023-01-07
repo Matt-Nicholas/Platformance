@@ -4,49 +4,47 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Timer))]
-public class GameplayManager:MonoBehaviour {
+public class GameplayManager : MonoBehaviour
+{
 
   public static Color startColor = Color.white;
 
   private Block[] blocks;
-  private Dictionary<Color/*player color*/, int/*number of blocks player owns*/> score = new Dictionary<Color, int>();
+  private Dictionary<Color /*player color*/, int /*number of blocks player owns*/> score = new Dictionary<Color, int>();
   private bool winnerDeclared = false;
-
-  private Timer lapTimer;
-
-  void Start() {
-
+  
+  void Start()
+  {
     blocks = GetAllBlocks();
-
-    lapTimer = GetComponent<Timer>();
   }
 
-  private Block[] GetAllBlocks() {
+  private Block[] GetAllBlocks()
+  {
     return FindObjectsOfType(typeof(Block)) as Block[];
   }
 
   // Update is called once per frame
-  void Update() {
-    if(blocks.Length == 0) return;
-
-    if(GameObject.Find("TimerDisplay") != null)
-      lapTimer.UpdateTimerDisplay();
+  void Update()
+  {
+    if (blocks.Length == 0) return;
 
     // Set all blocks colored to true...
     bool levelComplete = AllBlocksColored();
 
 
-    if(levelComplete && !winnerDeclared) {
+    if (levelComplete && !winnerDeclared)
+    {
 
       winnerDeclared = true;
 
-      lapTimer.StopTimer();
-
       // count blocks of each color
-      for(int i = 0; i < blocks.Length; i++) {
-        if(!score.ContainsKey(blocks[i].Color)) {
+      for (int i = 0; i < blocks.Length; i++)
+      {
+        if (!score.ContainsKey(blocks[i].Color))
+        {
           score[blocks[i].Color] = 0;
         }
+
         score[blocks[i].Color] += 1;
       }
 
@@ -54,8 +52,10 @@ public class GameplayManager:MonoBehaviour {
 
       int highestCount = 0;
 
-      foreach(Color cColor in score.Keys) {
-        if(score[cColor] > highestCount) {
+      foreach (Color cColor in score.Keys)
+      {
+        if (score[cColor] > highestCount)
+        {
           highestCount = score[cColor];
           winner = cColor;
         }
@@ -67,14 +67,19 @@ public class GameplayManager:MonoBehaviour {
 
 
   }
-  private bool AllBlocksColored() {
 
-    if(blocks.Length == 0) {
+  private bool AllBlocksColored()
+  {
+
+    if (blocks.Length == 0)
+    {
       return false;
     }
 
-    for(int i = 0; i < blocks.Length; i++) {
-      if(blocks[i].Color == startColor || blocks[i].Color == Color.black) {
+    for (int i = 0; i < blocks.Length; i++)
+    {
+      if (blocks[i].Color == startColor || blocks[i].Color == Color.black)
+      {
         return false;
       }
     }

@@ -1,30 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
+using UnityEngine.EventSystems;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject _firstSelected;
+    private readonly Game _game = Game.Instance;
 
-    TheGameManager GM = TheGameManager.Instance;
+    private void Start()
+    {
+        EventSystem.current.SetSelectedGameObject(_firstSelected);
+    }
 
     public void SinglePlayerSelected()
     {
-        GM.LoadPlayerSetup(TheGameManager.GameMode.SinglePlayer);
-    }
-
-    public void VersusSelected()
-    {
-        GM.LoadPlayerSetup(TheGameManager.GameMode.None);
+        _game.LoadPlayerSetup(Game.GameMode.SinglePlayer);
     }
 
     public void QuitSelected()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+        EditorApplication.isPlaying = false;
 #else
          Application.Quit();
 #endif
     }
+    
+    
 }

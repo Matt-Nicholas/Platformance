@@ -1,159 +1,208 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class ColorSelector : MonoBehaviour
 {
-    private Color[] colors = new Color[]
-    {
-        Color.red,
-        Color.blue,
-        Color.green,
-        Color.yellow,
-        Color.magenta,
-        Color.cyan,
-        Color.white,
-        Color.black,
-        Color.green,
-        Color.green,
-        Color.green
-    };
+    [SerializeField] private PlayerPortrait[] playerPortraits;
+    [SerializeField] private SelectorButton[] buttons;
+    
+    private const int P1FirstSelected = 0;
+    private const int P2FirstSelected = 4;
+    private const int P3FirstSelected = 5;
+    private const int P4FirstSelected = 9;
 
+    private Dictionary<int, int> _playerSelectionByIndex = new ();
+    
+    private readonly int lockIndex = 2;
+    private Game _game;
 
-    public ColorSelector otherSelector;
-    public Text instructions;
-    public GameObject buttonTrans;
-    [SerializeField] private int playerNumber;
-    [SerializeField] private Button[] buttons;
-    private string chooseColorTxt = "Choose Your Color";
-    private string joinTxt = "Press Start!";
-    private int lockIndex = 2;
-    private int cButtonIndex;
-    private bool justMoved = false;
-    private bool ready;
     private bool joined;
-    private TheGameManager gameManager;
+    private bool justMoved;
+    private bool ready;
 
     private void Start()
     {
-        gameManager = TheGameManager.Instance;
+        _game = Game.Instance;
 
-        for (int i = 0; i < buttons.Length; i++)
+        for (var i = 0; i < buttons.Length; i++)
         {
-            if (i > lockIndex) break;
-
-            buttons[i].GetComponent<Image>().color = colors[i];
+            // if (i > lockIndex) break;
+            
+            buttons[i].SetColor(colors[i]);
+            buttons[i].Unselect();
         }
-
-        cButtonIndex = playerNumber - 1;
-        buttons[cButtonIndex].Select();
-        buttons[cButtonIndex].transform.localScale = new Vector3(1.35f, 1.35f, 1);
-
-        if (playerNumber == 2)
-            instructions.text = joinTxt;
-
-        joined = (playerNumber == 1) ? true : false;
+        
+        NavRight(0, P1FirstSelected - 1);
+        playerPortraits[0].SetStatus(PlayerPortrait.PlayerStatus.ChooseColor);
+        
+        Game.Instance.Players[0].InputHandler.OnUINavigate += HandleUINavigate;
+        Game.Instance.Players[0].InputHandler.OnUISubmit += HandleUISubmit;
+        Game.Instance.Players[0].InputHandler.OnUICancel += HandleUICancel;
+        
+        _game.OnPlayerJoinedGame += HandlePlayerJoined;
+        
+        _game.SetJoiningEnabled(true);
     }
 
+    private void HandlePlayerJoined(int index)
+    {
+        switch (index){
+            case 1:
+                NavRight(index, P2FirstSelected - 1);
+                break;
+            case 2:
+                NavRight(index, P3FirstSelected - 1);
+                break;
+            case 3:
+                NavRight(index, P4FirstSelected - 1);
+                break;
+        }
+        
+        Game.Instance.Players[index].InputHandler.OnUINavigate += HandleUINavigate;
+        Game.Instance.Players[index].InputHandler.OnUISubmit += HandleUISubmit;
+        Game.Instance.Players[index].InputHandler.OnUICancel += HandleUICancel;
+    }
+
+    public void NavRight(int playerIndex, int currentIndex)
+    {
+        var target = currentIndex + 1;
+        if (target == buttons.Length)
+        {
+            target = 0;
+        }
+        
+        for (int i = target; i < buttons.Length; i++)
+        {
+            if (buttons[i].TrySelect(playerIndex))
+            {
+                if (currentIndex < buttons.Length && currentIndex > -1)
+                {
+                    buttons[currentIndex].Unselect();    
+                }
+                
+                if (_playerSelectionByIndex.ContainsKey(playerIndex))
+                {
+                    _playerSelectionByIndex[playerIndex] = i;
+                }
+                else
+                {
+                    _playerSelectionByIndex.Add(playerIndex, i);
+                }
+                
+                playerPortraits[playerIndex].SetColor(buttons[i].Color);
+                Game.Instance.Players[playerIndex].SetColor(buttons[i].Color);
+                return;
+            }
+        }
+        
+        // If we made it here, we went through the loop without finding an available space. Try Again from the beginning
+        NavRight(playerIndex, 0);
+    }
+    
+    public void NavLeft(int playerIndex, int currentIndex)
+    {
+        buttons[currentIndex].Unselect();
+        var target = currentIndex - 1;
+        if (target < 0)
+        {
+            target = buttons.Length - 1;
+        }
+        
+        for (int i = target; i >= 0; i--)
+        {
+            if (buttons[i].TrySelect(playerIndex))
+            {
+                if (_playerSelectionByIndex.ContainsKey(playerIndex))
+                {
+                    _playerSelectionByIndex[playerIndex] = i;
+                }
+                else
+                {
+                    _playerSelectionByIndex.Add(playerIndex, i);
+                }
+                
+                playerPortraits[playerIndex].SetColor(buttons[i].Color);
+                Game.Instance.Players[playerIndex].SetColor(buttons[i].Color);
+                return;
+            }
+        }
+
+        // If we made it here, we went through the loop without finding an available space. Try Again from the end
+        NavLeft(playerIndex, buttons.Length - 1);
+    }
+
+    private void OnDestroy()
+    {
+        if (Game.Instance == null)
+            return;
+        
+        foreach (var player in Game.Instance.Players)
+        {
+            player.InputHandler.OnUINavigate -= HandleUINavigate;
+            player.InputHandler.OnUISubmit -= HandleUISubmit;
+            player.InputHandler.OnUICancel -= HandleUICancel;
+        }
+    }
+    
+    private void HandleUINavigate(int playerIndex, Vector2 dir)
+    {
+        if (playerPortraits[playerIndex].IsReady)
+            return;
+        
+        var currentSelection = _playerSelectionByIndex[playerIndex];
+        if (dir.x > 0)
+        {
+            NavRight(playerIndex, currentSelection);
+        }
+        else if (dir.x < 0)
+        {
+            NavLeft(playerIndex, currentSelection);
+        }
+        
+        //TODO vertical movement
+    }
+    
+    private void HandleUISubmit(int playerIndex)
+    {
+        switch (playerPortraits[playerIndex].Status)
+        {
+            case PlayerPortrait.PlayerStatus.NotJoined:
+                playerPortraits[playerIndex].SetStatus(PlayerPortrait.PlayerStatus.ChooseColor);
+                break;
+            case PlayerPortrait.PlayerStatus.ChooseColor:
+                playerPortraits[playerIndex].SetStatus(PlayerPortrait.PlayerStatus.Ready);
+                break;
+            case PlayerPortrait.PlayerStatus.Ready:
+                if (playerIndex == 0)
+                { 
+                    bool allPlayersReady = playerPortraits.All(p => p.IsReady || p.Status == PlayerPortrait.PlayerStatus.NotJoined);
+
+                    if (allPlayersReady)
+                    {
+                        Game.Instance.StartGame();
+                    }
+                }
+                break;
+        }
+    }
+
+    private void HandleUICancel(int playerIndex)
+    {
+        throw new System.NotImplementedException();
+    }
+    
     private void Update()
     {
-        int startingIndex = cButtonIndex;
-        int tempIndex = cButtonIndex;
-
-        if (joined && !justMoved && !ready)
-        {
-            // Horizontal
-            if (InputManager.MainHorizontal(gameManager.Players[playerNumber].controllerID) > 0.2f)
-            {
-                tempIndex += 1;
-
-                if (tempIndex > lockIndex) tempIndex = lockIndex;
-                else if (tempIndex >= buttons.Length) tempIndex = buttons.Length - 1;
-
-                justMoved = true;
-            }
-            else if (InputManager.MainHorizontal(gameManager.Players[playerNumber].controllerID) < -0.2f)
-            {
-                tempIndex -= 1;
-
-                if (tempIndex < 0) tempIndex = 0;
-                justMoved = true;
-
-            }
-
-            // Vertical
-            else if (InputManager.MainVertical(gameManager.Players[playerNumber].controllerID) < -0.2f)
-            {
-                int temp = tempIndex + 5;
-
-                if (temp > lockIndex) temp = lockIndex;
-                if (temp < buttons.Length)
-                {
-                    tempIndex = temp;
-                    justMoved = true;
-                }
-            }
-            else if (InputManager.MainVertical(gameManager.Players[playerNumber].controllerID) > 0.2f)
-            {
-                int temp = tempIndex - 5;
-
-                if (temp >= 0)
-                    tempIndex = temp;
-                justMoved = true;
-            }
-
-            if (justMoved)
-            {
-                buttons[cButtonIndex].transform.localScale = new Vector3(1, 1, 1);
-
-                if (tempIndex == otherSelector.cButtonIndex)
-                {
-                    if (tempIndex > startingIndex)
-                    {
-                        tempIndex = AdjustIndex(tempIndex, true);
-                    }
-                    else
-                    {
-                        tempIndex = AdjustIndex(tempIndex, false);
-                    }
-                }
-
-                cButtonIndex = tempIndex;
-
-                buttons[cButtonIndex].Select();
-                buttons[cButtonIndex].transform.localScale = new Vector3(1.35f, 1.35f, 1);
-
-                Invoke("ResetJustMoved", 0.15f);
-            }
-        }
-
-        if (InputManager.AButtonDown(gameManager.Players[playerNumber].controllerID))
-        {
-            if (!joined)
-            {
-                buttonTrans.SetActive(true);
-                instructions.text = chooseColorTxt;
-                joined = true;
-            }
-            else
-            {
-
-                gameManager.Players[playerNumber].Color = colors[cButtonIndex];
-
-                // tell game manager all players are ready
-                ready = true;
-
-                if (playerNumber == 1)
-                {
-                    SceneManager.LoadScene("Prototyping");
-                }
-            }
-        }
+        
     }
 
-    int AdjustIndex(int tempIndex, bool movingUp)
+    private int AdjustIndex(int tempIndex, bool movingUp)
     {
-        int i = tempIndex;
+        var i = tempIndex;
         if (movingUp)
         {
             if (i + 1 < buttons.Length && i + 1 <= lockIndex)
@@ -172,45 +221,18 @@ public class ColorSelector : MonoBehaviour
         return i;
     }
 
-    void ResetJustMoved()
+    private readonly Color[] colors =
     {
-        justMoved = false;
-    }
-
-    public void SetColor(string color)
-    {
-        Color temp = Color.white;
-
-        switch (color)
-        {
-
-            case "red":
-                temp = Color.red;
-                break;
-
-            case "blue":
-                temp = Color.blue;
-                break;
-
-            case "green":
-                temp = Color.green;
-                break;
-
-            case "yellow":
-                temp = Color.yellow;
-                break;
-
-            case "magenta":
-                temp = Color.magenta;
-                break;
-        }
-
-        gameManager.Players[playerNumber].Color = temp;
-
-    }
-
-    public int CButtonIndex
-    {
-        get { return cButtonIndex; }
-    }
+        Color.red,
+        Color.blue,
+        Color.green,
+        Color.yellow,
+        Color.magenta,
+        Color.cyan,
+        Color.white,
+        Color.black,
+        Color.green,
+        Color.green,
+        Color.green
+    };
 }

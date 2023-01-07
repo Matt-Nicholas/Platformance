@@ -3,7 +3,6 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour
 {
-
     public Controller2D target;
     public float verticalOffset;
     public float lookAheadDstX;
@@ -20,14 +19,19 @@ public class CameraFollow : MonoBehaviour
     float smoothVelocityY;
 
     bool lookAheadStopped;
+    
 
-    void Start()
+    public void SetTarget(Controller2D t)
     {
+        target = t;
         focusArea = new FocusArea(target.m_Collider.bounds, focusAreaSize);
     }
-
+    
     void LateUpdate()
     {
+        if (target == null)
+            return;
+        
         focusArea.Update(target.m_Collider.bounds);
 
         Vector2 focusPosition = focusArea.centre + Vector2.up * verticalOffset;

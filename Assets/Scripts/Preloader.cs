@@ -3,11 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class Preloader : MonoBehaviour
 {
-    void Awake()
+    private void Awake()
     {
-        if (FindObjectOfType<TheGameManager>() == null)
-        {
-            SceneManager.LoadScene("_preload");
-        }
+        if (FindObjectOfType<Game>() == null) SceneManager.LoadScene("_preload");
     }
 }
