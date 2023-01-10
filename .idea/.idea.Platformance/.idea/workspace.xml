@@ -11,6 +11,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4a31731933e0419ca5a995305014ad37157a00/6c/b2dc3989/SceneManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ad4a992768794363ade575f9e564f6e610fc00/55/9be37b1c/Enumerable.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b8044150aae1441db20439e75581176c7400/60/9deb1c52/Input.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e40e5a8f982c4b618a930d29f9bd091c46a800/d8/9334ea92/Random.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5995835e2565222bd845851833bf32626f8a8e23753c86c8cc54d6f22587cd6a/System.Globalization.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Blocks/Block.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Blocks/ColorBlock.cs" root0="FORCE_HIGHLIGHTING" />
@@ -79,10 +80,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="12916">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="12916" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -100,30 +101,45 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/LevelObjects/PhysicsVolume.cs</url>
-          <line>11</line>
-          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\LevelObjects\PhysicsVolume.cs" initialLine="11" containingFunctionPresentation="method 'OnTriggerEnter2D'">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GameControl/Tournament.cs</url>
+          <line>52</line>
+          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\GameControl\Tournament.cs" initialLine="54" containingFunctionPresentation="method 'HandleStageCompleted'">
             <startOffsets>
-              <option value="277" />
+              <option value="1284" />
             </startOffsets>
             <endOffsets>
-              <option value="325" />
+              <option value="1300" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="16" />
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/LevelObjects/PhysicsVolume.cs</url>
-          <line>8</line>
-          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\LevelObjects\PhysicsVolume.cs" initialLine="8" containingFunctionPresentation="method 'OnTriggerEnter2D'">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GameControl/Managers/GameplayManager.cs</url>
+          <line>24</line>
+          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\GameControl\Managers\GameplayManager.cs" initialLine="24" containingFunctionPresentation="method 'Update'">
             <startOffsets>
-              <option value="180" />
+              <option value="553" />
+              <option value="577" />
             </startOffsets>
             <endOffsets>
-              <option value="214" />
+              <option value="576" />
+              <option value="584" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="35" />
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/GameControl/Tournament.cs</url>
+          <line>27</line>
+          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\GameControl\Tournament.cs" initialLine="27" containingFunctionPresentation="method 'PopulateStageList'">
+            <startOffsets>
+              <option value="640" />
+            </startOffsets>
+            <endOffsets>
+              <option value="677" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

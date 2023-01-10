@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.SceneManagement;
 
 public class Tournament
@@ -29,10 +28,10 @@ public class Tournament
         for (int i = 0; i < _totalGames; i++)
         {
             System.Random random = new System.Random();
-            var index = random.Next(0, _stageNames.Length);
+            var index = random.Next(0, tempStages.Count);
             _stageNames[i] = tempStages[index];
 
-            tempStages.RemoveAt(i);
+            tempStages.RemoveAt(index);
         }
     }
 
@@ -40,7 +39,8 @@ public class Tournament
     {
         if(_stageNumber >= _stageNames.Length)
         {
-            Game.Instance.LoadMainMenu();
+            Game.Instance.TournamentCompleted();
+            return;
         }
         SceneManager.LoadScene(_stageNames[_stageNumber]);
         _stageNumber++;

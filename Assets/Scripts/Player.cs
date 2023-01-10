@@ -17,6 +17,14 @@ public class Player : MonoBehaviour
             SetVisible(false);
       }
 
+      public void SetupForUI()
+      {
+            SetControlsActive(false);
+            SetVisible(false);
+            SetPosition(new Vector2(0, 0));
+            SetActionMap("UI");
+      }
+      
       public void SetControlsActive(bool active)
       {
             Controller.PlayerCanMove = active;

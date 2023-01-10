@@ -89,7 +89,18 @@ public class Game : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        for (int i = 1; i < Players.Count; i++)
+        {
+            Destroy(Players[i]);
+        }
+        Players[0].SetupForUI();
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void TournamentCompleted()
+    {
+        _tournament = null;
+        LoadMainMenu();
     }
     
     public void LoadPlayerSetup(GameMode mode)

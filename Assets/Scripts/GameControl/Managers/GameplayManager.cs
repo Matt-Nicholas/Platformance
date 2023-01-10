@@ -2,12 +2,8 @@
 using UnityEngine;
 
 
-[RequireComponent(typeof(Timer))]
 public class GameplayManager : MonoBehaviour
 {
-
-
-
     public static Color startColor = Color.white;
 
     private Block[] blocks;
@@ -23,8 +19,7 @@ public class GameplayManager : MonoBehaviour
     {
         return FindObjectsOfType(typeof(Block)) as Block[];
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (blocks.Length == 0) return;
