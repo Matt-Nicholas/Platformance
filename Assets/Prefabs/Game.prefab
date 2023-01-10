@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5646550255855567086}
   - component: {fileID: 4370030251121029003}
   - component: {fileID: 2986136317687332738}
+  - component: {fileID: 1306472178406293685}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -65,10 +66,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8abaed06cef9a1d40abd05f63896e330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameSettings: {fileID: 1306472178406293685}
   AudioManager: {fileID: 5646550255855567087}
   currentMode: 0
   Players: []
   _playerInputManager: {fileID: 5646550255855567086}
+  _uiInputModule: {fileID: 2986136317687332738}
   _playersContainer: {fileID: 5440956279662206836}
 --- !u!114 &5646550255855567087
 MonoBehaviour:
@@ -189,6 +192,24 @@ MonoBehaviour:
     type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+--- !u!114 &1306472178406293685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5646550255855567083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4135ccf9edb6b44392903fba5ee2f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Stages:
+  - Prototyping
+  - Main
+  - Versus
+  - Scrolling
+  GameTypes: 01000000010000000100000000000000
 --- !u!1 &7243197775115943003
 GameObject:
   m_ObjectHideFlags: 0

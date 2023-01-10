@@ -16,8 +16,11 @@ public class Game : MonoBehaviour
         Competetive
     }
     public static Game Instance { get; private set; }
+    public GameSettings GameSettings;
     public AudioManager AudioManager;
     public Action<int> OnPlayerJoinedGame;
+    public Action<int> OnStageCompleted;
+    
     [HideInInspector] public GameMode currentMode;
     [HideInInspector] public List<Player> Players = new();
     
@@ -25,6 +28,8 @@ public class Game : MonoBehaviour
     [SerializeField] private InputSystemUIInputModule _uiInputModule;
     
     [SerializeField] private Transform _playersContainer;
+
+    private Tournament _tournament;
     
     public void Awake()
     {
@@ -34,9 +39,15 @@ public class Game : MonoBehaviour
             Instance = this;
     }
 
+    public void StartTournament()
+    {
+        _tournament = new Tournament(2);
+        _tournament.StartTournament();
+    }
+
     public void StartGame()
     {
-        SceneManager.LoadScene("Prototyping");
+        StartTournament();
     }
 
     [UsedImplicitly]
@@ -92,5 +103,10 @@ public class Game : MonoBehaviour
         {
             SceneManager.LoadScene("MultiplayerSetup");
         }
+    }
+
+    public void ReportStageCompleted()
+    {
+        OnStageCompleted?.Invoke(0);
     }
 }
