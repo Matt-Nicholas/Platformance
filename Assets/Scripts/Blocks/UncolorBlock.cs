@@ -1,17 +1,18 @@
-﻿using UnityEngine;
-
-public class UncolorBlock:Block {
-
-  public override void Start() {
-    base.Start();
-  }
-
-  private void Entered(Color playersColor) {
-    if(currentColor != playersColor) {
-      SetColor(playersColor);
+﻿
+public class UncolorBlock : Block
+{
+    
+    public override void TriggerEntered(Player player)
+    {
+        if (CurrentColor != player.Color)
+        {
+            SetColor(player.Color);
+            Claim(player);
+        }
+        else if (CurrentColor == player.Color)
+        {
+            Unclaim();
+            SetColor(Game.Instance.GameSettings.ColorBlockStartColor);
+        }
     }
-    else if(currentColor == playersColor) {
-      SetColor(GameplayManager.startColor);
-    }
-  }
 }

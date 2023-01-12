@@ -47,6 +47,7 @@ public class Game : MonoBehaviour
 
     public void StartGame()
     {
+        _playerInputManager.DisableJoining();
         StartTournament();
     }
 

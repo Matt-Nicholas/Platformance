@@ -1,26 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-public class MultiTouchBlock:Block {
+public class MultiTouchBlock : Block
+{
 
-  List<Block> childBlocks = new List<Block>();
-  public override void Start() {
-    base.Start();
-    childBlocks = gameObject.GetComponentsInChildren<Block>().ToList();
-  }
+    List<Block> childBlocks = new List<Block>();
 
-  private void Entered(Color playerColor) {
-    for(int i = 0; i < childBlocks.Count; i++) {
-      if(childBlocks[i].Color != startColor && childBlocks[i].Color != playerColor) {
-        childBlocks[i].SetColor(startColor);
-        childBlocks[i].SetColor(playerColor);
-        return;
-      }
-      else if(childBlocks[i].Color == startColor) {
-        childBlocks[i].SetColor(playerColor);
-        return;
-      }
+    public override void Init()
+    {
+        base.Init();
+        childBlocks = gameObject.GetComponentsInChildren<Block>().ToList();
     }
-  }
+
+    public override void TriggerEntered(Player player)
+    {
+        for (int i = 0; i < childBlocks.Count; i++)
+        {
+            if (childBlocks[i].Color != StartColor && childBlocks[i].Color != player.Color)
+            {
+                childBlocks[i].SetColor(StartColor);
+                childBlocks[i].SetColor(player.Color);
+                return;
+            }
+            
+            if (childBlocks[i].Color == StartColor)
+            {
+                childBlocks[i].SetColor(player.Color);
+                return;
+            }
+        }
+    }
 }

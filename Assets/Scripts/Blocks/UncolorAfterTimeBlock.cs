@@ -1,32 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class UncolorAfterTimeBlock:Block {
+public class UncolorAfterTimeBlock : Block
+{
 
-  [SerializeField] private float countTime = 0;
-  private float counter;
+    [SerializeField] private float countTime = 0;
+    private float counter;
 
-  public override void Start() {
-    base.Start();
-   if(countTime == 0) {
-      print(this.name + " must have an timer greater than 0");
+    private void Update()
+    {
+        if (counter > 0)
+        {
+            counter -= Time.deltaTime;
+        }
+        else if(_owner != null)
+        {
+            SetColor(StartColor);
+            Unclaim();
+            _owner = null;
+        }
     }
-  }
 
-  private void Update() {
-    if(counter >= 0) {
-      counter -= Time.deltaTime;
+    public override void TriggerEntered(Player player)
+    {
+        base.TriggerEntered(player);
+        SetColor(player.Color);
+        counter = countTime;
+        Claim(player);
     }
-    if(counter <= 0) {
-      SetColor(GameplayManager.startColor);
-    }
-  }
-
-  private void Entered(Color playerColor) { 
-    SetColor(playerColor);
-    counter = countTime;
-
-  }
 }

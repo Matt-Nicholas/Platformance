@@ -1,45 +1,26 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MatchBlock:Block {
+public class MatchBlock : Block
+{
+    public Color colorToMatch;
+    public bool matched;
 
-  public Color colorToMatch;
-  private Color m_StartColor;
-
-  public bool matched = false;
-
-
-  // Use this for initialization
-  public override void Start() {
-    base.Start();
-    m_StartColor = new Color(colorToMatch.r, colorToMatch.g, colorToMatch.b, 0.5f);
-    SetColor(m_StartColor);
-    //sequenceBlocks = FindObjectsOfType(typeof(SequenceBlock)) as SequenceBlock[];
-
-    //orderNumber = Convert.ToInt32(text.Trim());
-  }
-
-  private void Entered(Color color) {
-    if(color == colorToMatch) {
-      matched = true;
-      SetColor(colorToMatch);
+    private Color _startColor;
+    
+    public override void Init()
+    {
+        base.Init();
+        _startColor = new Color(colorToMatch.r, colorToMatch.g, colorToMatch.b, colorToMatch.a * 0.5f);
+        SetColor(_startColor);
     }
-    print("Block is matched: " + matched);
-  }
 
-  private void Exited(Color color) {
-
-    if(color == colorToMatch) {
-      matched = false;
-      SetColor(m_StartColor);
+    public override void TriggerEntered(Player player)
+    {
+        if (player.Color == colorToMatch)
+        {
+            Claim(player);
+            matched = true;
+            SetColor(player.Color);
+        }
     }
-    print("Block is matched: " + matched);
-  }
-
-  // Update is called once per frame
-  void Update() {
-
-  }
 }

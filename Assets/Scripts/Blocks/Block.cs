@@ -1,41 +1,66 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Block : MonoBehaviour
 {
-
+    public Action<Player> OnBlockClaimed; 
+    public Action<Player> OnBlockUnClaimed;
+    
     public Color Color { get; protected set; }
-    protected Renderer rend;
-    protected Color currentColor;
-    protected Color startColor;
+    
+    protected Renderer Renderer;
+    protected Color CurrentColor;
+    protected Color StartColor;
 
-    private bool canBeChanged = true;
-
-    public virtual void Start()
+    private bool _canBeChanged = true;
+    protected Player _owner = null;
+    
+    public virtual void Init()
     {
-        rend = GetComponent<Renderer>();
+        if(Game.Instance == null)
+            return;
+        
+        StartColor = Game.Instance.GameSettings.ColorBlockStartColor;
+        Renderer = GetComponent<Renderer>();
+        SetColor(StartColor);
+    }
 
-        SetColor(GameplayManager.startColor);
+    public virtual void TriggerEntered(Player player)
+    {
+        
+    }
 
-        //SetColor(Color.black);
-        //StartCoroutine(ActivateBlock());
+    public virtual void TriggerExited(Player player)
+    {
+        
+    }
+    
+    protected void Claim(Player player)
+    {
+        _owner = player;
+        OnBlockClaimed?.Invoke(player);
+    }
+
+    protected void Unclaim()
+    {
+        OnBlockUnClaimed?.Invoke(_owner);
+        _owner = null;
     }
 
     public virtual void SetColor(Color col)
     {
-        //if(!TheGameManager.Instance.blocksAreActive) return;
-        this.currentColor = col;
-        rend.material.color = col;
+        CurrentColor = col;
+        Renderer.material.color = CurrentColor;
     }
 
-
-    IEnumerator ActivateBlock()
+    private IEnumerator ActivateBlock()
     {
         float delayTime = Random.Range(0.25f, 3.0f);
 
         yield return new WaitForSeconds(delayTime);
-        SetColor(GameplayManager.startColor);
+        SetColor(StartColor);
 
     }
-
 }

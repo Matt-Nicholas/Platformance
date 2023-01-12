@@ -1253,6 +1253,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 114578664901108614, guid: be7461aea32d13248bdc24f5d8d874af,
+        type: 3}
+      propertyPath: OrderNumber
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be7461aea32d13248bdc24f5d8d874af, type: 3}
 --- !u!4 &577659870 stripped
@@ -7659,7 +7664,7 @@ GameObject:
   - component: {fileID: 1637427301}
   - component: {fileID: 1637427299}
   m_Layer: 0
-  m_Name: GameplayManager
+  m_Name: ColorBlockStage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8318,7 +8323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 884b9d639aa92b244bb571f67f3f5507, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orderNumber: 0
+  OrderNumber: 2
 --- !u!1001 &1852678289
 PrefabInstance:
   m_ObjectHideFlags: 0

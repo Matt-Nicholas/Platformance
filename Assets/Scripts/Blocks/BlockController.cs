@@ -11,13 +11,19 @@ public class BlockController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag.Equals("Block"))
-            other.gameObject.SendMessage("Entered", player.Color, SendMessageOptions.DontRequireReceiver);
+        if (!other.tag.Equals("Block")) 
+            return;
+
+        var block = other.GetComponent<Block>();
+        block.TriggerEntered(player);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag.Equals("Block"))
-            other.gameObject.SendMessage("Exited", player.Color, SendMessageOptions.DontRequireReceiver);
+        if (!other.tag.Equals("Block")) 
+            return;
+
+        var block = other.GetComponent<Block>();
+        block.TriggerExited(player);
     }
 }

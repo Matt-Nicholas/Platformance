@@ -1,15 +1,12 @@
-﻿using UnityEngine;
-
+﻿
 public class ColorBlock : Block
 {
-    public override void Start()
+    public override void TriggerEntered(Player player)
     {
-         base.Start();
-    }
-    
-    public void Entered(Color c)
-    {
-          if (c == currentColor) return;
-          SetColor(c);
+        if (_owner == player) 
+            return;
+        
+        Claim(player);
+        SetColor(player.Color);
     }
 }
