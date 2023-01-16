@@ -19,7 +19,7 @@ public class ColorBlockStage : MonoBehaviour
         {
             block.Init();
             block.OnBlockClaimed += HandleBlockClaimed;
-            block.OnBlockUnClaimed += HandleBlockExited;
+            block.OnBlockUnClaimed += HandleBlockUnclaimed;
         }
     }
     
@@ -50,14 +50,15 @@ public class ColorBlockStage : MonoBehaviour
             
             foreach (var kvp in orderedByCount)
             {
-                print($"player: {kvp.Key} block: {kvp.Value}");
+                print($"Player {kvp.Key.Index + 1} has {kvp.Value} block(s)");
             }
             Game.Instance.ReportStageCompleted();
         }
     }
 
-    private void HandleBlockExited(Player obj)
+    private void HandleBlockUnclaimed(Player player)
     {
         _claimedBlockCount--;
+        _score[player]--;
     }
 }

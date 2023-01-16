@@ -3,31 +3,32 @@ using System.Linq;
 
 public class MultiTouchBlock : Block
 {
-
-    List<Block> childBlocks = new List<Block>();
-
+    private List<Block> _childBlocks = new List<Block>();
+    private int _nextIndex;
+    
     public override void Init()
     {
         base.Init();
-        childBlocks = gameObject.GetComponentsInChildren<Block>().ToList();
+        _childBlocks = gameObject.GetComponentsInChildren<Block>().ToList();
     }
 
     public override void TriggerEntered(Player player)
     {
-        for (int i = 0; i < childBlocks.Count; i++)
+        if (_owner != player)
         {
-            if (childBlocks[i].Color != StartColor && childBlocks[i].Color != player.Color)
+            foreach (var block in _childBlocks)
             {
-                childBlocks[i].SetColor(StartColor);
-                childBlocks[i].SetColor(player.Color);
-                return;
+                block.Unclaim();
+                _childBlocks[_nextIndex].SetColor(StartColor);
             }
-            
-            if (childBlocks[i].Color == StartColor)
-            {
-                childBlocks[i].SetColor(player.Color);
-                return;
-            }
+            _nextIndex = 0;
+        }
+
+        if (_childBlocks.Count > _nextIndex)
+        {
+            _childBlocks[_nextIndex].Claim(player);
+            _childBlocks[_nextIndex].SetColor(player.Color);
+            _nextIndex++;    
         }
     }
 }

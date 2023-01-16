@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+      [HideInInspector] public int Index;
+
+      public Action<Player> OnUnjoined;
       public PlayerInput PlayerInput;
       public PlayerInputHandler InputHandler;
       public PlayerController Controller;
@@ -42,6 +46,7 @@ public class Player : MonoBehaviour
 
       public void SetActionMap(string map)
       {
+            InputHandler.ResetInputValues();
             PlayerInput.SwitchCurrentActionMap(map);
       }
       
@@ -49,5 +54,10 @@ public class Player : MonoBehaviour
       {
             Color = color;
             _renderer.color = Color;
+      }
+
+      private void OnDestroy()
+      {
+            OnUnjoined?.Invoke(this);
       }
 }

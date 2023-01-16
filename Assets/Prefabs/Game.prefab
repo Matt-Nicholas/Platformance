@@ -205,11 +205,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Stages:
-  - Prototyping
-  - Main
-  - Versus
-  - Scrolling
-  GameTypes: 01000000010000000100000000000000
+  - ColorBlockTest
+  GameTypes: 00000000
   ColorBlockStartColor: {r: 1, g: 1, b: 1, a: 0}
 --- !u!1 &7243197775115943003
 GameObject:

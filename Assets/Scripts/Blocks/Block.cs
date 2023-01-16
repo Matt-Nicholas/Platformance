@@ -37,13 +37,13 @@ public class Block : MonoBehaviour
         
     }
     
-    protected void Claim(Player player)
+    public void Claim(Player player)
     {
         _owner = player;
         OnBlockClaimed?.Invoke(player);
     }
 
-    protected void Unclaim()
+    public void Unclaim()
     {
         OnBlockUnClaimed?.Invoke(_owner);
         _owner = null;

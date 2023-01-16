@@ -25,7 +25,7 @@ public class SelectorButton : MonoBehaviour
 
 		IsSelected = true;
 		_playerNumber.text = $"P{playerIndex + 1}";
-		_playerFrame.gameObject.SetActive(true);
+		_playerFrame.SetActive(true);
 
 		return true;
 	}
@@ -34,6 +34,6 @@ public class SelectorButton : MonoBehaviour
 	{
 		IsSelected = false;
 
-		_playerFrame.gameObject.SetActive(false);
+		_playerFrame.SetActive(false);
 	}
 }

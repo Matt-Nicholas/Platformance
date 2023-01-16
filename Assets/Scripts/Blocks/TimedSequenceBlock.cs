@@ -24,7 +24,7 @@ public class TimedSequenceBlock : Block
         {
             if (_isTriggered)
             {
-
+                Unclaim();
                 SetColor(Game.Instance.GameSettings.ColorBlockStartColor);
                 _isTriggered = false;
             }
@@ -47,6 +47,7 @@ public class TimedSequenceBlock : Block
         if (PreviousBlockIsColored())
         {
             _isTriggered = true;
+            Claim(player);
             SetColor(player.Color);
             _timer = countdownTime;
         }

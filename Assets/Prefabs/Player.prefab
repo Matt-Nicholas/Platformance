@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7143a651dc4e3e449e2e89d0f8d684b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: 0
   PlayerInput: {fileID: 3214727955228922144}
   InputHandler: {fileID: 114573748228515654}
   Controller: {fileID: 114902350349908182}
@@ -186,7 +187,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e6f4c56c834d6740a2f05b6684d54b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIndex: 0
+  _player: {fileID: 2777379702881612288}
+  _playerController: {fileID: 114902350349908182}
 --- !u!114 &114460983235355066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,6 +232,7 @@ MonoBehaviour:
   wallJumpOff: {x: 10.265, y: 8.75}
   wallLeap: {x: 13.75, y: 21.25}
   PlayerCanMove: 0
+  _controller2D: {fileID: 114460983235355066}
 --- !u!114 &114454843668275008
 MonoBehaviour:
   m_ObjectHideFlags: 0

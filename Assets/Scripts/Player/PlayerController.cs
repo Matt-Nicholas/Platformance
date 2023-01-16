@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private readonly float accelerationTimeAirborne = .1f;
     private readonly float accelerationTimeGrounded = .1f;
 
-    private Controller2D controller;
+    [SerializeField] private Controller2D _controller2D;
 
     private Vector2 directionalInput;
     private float gravity;
@@ -38,11 +38,6 @@ public class PlayerController : MonoBehaviour
     private bool wallSliding;
     private float wallUnstickCounter;
     
-    private void Awake()
-    {
-        controller = GetComponent<Controller2D>();
-    }
-
     private void Start()
     {
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -60,15 +55,21 @@ public class PlayerController : MonoBehaviour
 
         if (isInPhysicsVolume) velocity.y = physicsVolumeVelocity.y;
 
-        controller.Move(velocity * Time.deltaTime, directionalInput);
+        _controller2D.Move(velocity * Time.deltaTime, directionalInput);
 
-        if (controller.collisions.above || controller.collisions.below)
+        if (_controller2D.collisions.above || _controller2D.collisions.below)
         {
-            if (controller.collisions.slidingDownMaxSlope)
-                velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
+            if (_controller2D.collisions.slidingDownMaxSlope)
+                velocity.y += _controller2D.collisions.slopeNormal.y * -gravity * Time.deltaTime;
             else
                 velocity.y = 0;
         }
+    }
+
+    public void ResetMovementValues()
+    {
+        isboosting = false;
+        velocity = Vector3.zero;
     }
 
     public void SetDirectionalInput(Vector2 input, bool isboosting)
@@ -85,8 +86,8 @@ public class PlayerController : MonoBehaviour
         if (isInPhysicsVolume)
             return;
 
-        if (wallSliding || ((controller.collisions.left || controller.collisions.right) &&
-                            !controller.collisions.below && velocity.y != 0))
+        if (wallSliding || ((_controller2D.collisions.left || _controller2D.collisions.right) &&
+                            !_controller2D.collisions.below && velocity.y != 0))
         {
             if (wallDirX == directionalInput.x)
             {
@@ -105,15 +106,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (controller.collisions.below)
+        if (_controller2D.collisions.below)
         {
-            if (controller.collisions.slidingDownMaxSlope)
+            if (_controller2D.collisions.slidingDownMaxSlope)
             {
-                if (directionalInput.x != -Mathf.Sign(controller.collisions.slopeNormal.x))
+                if (directionalInput.x != -Mathf.Sign(_controller2D.collisions.slopeNormal.x))
                 {
                     // not jumping against max slope
-                    velocity.y = maxJumpVelocity * controller.collisions.slopeNormal.y;
-                    velocity.x = maxJumpVelocity * controller.collisions.slopeNormal.x;
+                    velocity.y = maxJumpVelocity * _controller2D.collisions.slopeNormal.y;
+                    velocity.x = maxJumpVelocity * _controller2D.collisions.slopeNormal.x;
                 }
             }
             else
@@ -141,9 +142,9 @@ public class PlayerController : MonoBehaviour
         if (isInPhysicsVolume)
             return;
 
-        wallDirX = controller.collisions.left ? -1 : 1;
+        wallDirX = _controller2D.collisions.left ? -1 : 1;
         wallSliding = false;
-        if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below &&
+        if ((_controller2D.collisions.left || _controller2D.collisions.right) && !_controller2D.collisions.below &&
             velocity.y < 0)
         {
             wallSliding = true;
@@ -182,7 +183,7 @@ public class PlayerController : MonoBehaviour
         var targetVelocityX = directionalInput.x * moveSpeed;
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing,
-            controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
+            _controller2D.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
 
         velocity.y += gravity * Time.deltaTime;
     }

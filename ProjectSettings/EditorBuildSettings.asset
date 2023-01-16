@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Prototyping.unity
     guid: 7879fdebd8570eb43bcc5c4a4bc2794a
+  - enabled: 1
+    path: Assets/Scenes/ColorBlockTest.unity
+    guid: 3165732cdff464c4dbbe0126eadb2080
   m_configObjects: {}

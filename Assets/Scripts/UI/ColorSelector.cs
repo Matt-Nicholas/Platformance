@@ -39,10 +39,7 @@ public class ColorSelector : MonoBehaviour
         NavRight(0, P1FirstSelected - 1);
         playerPortraits[0].SetStatus(PlayerPortrait.PlayerStatus.ChooseColor);
         
-        Game.Instance.Players[0].InputHandler.OnUINavigate += HandleUINavigate;
-        Game.Instance.Players[0].InputHandler.OnUISubmit += HandleUISubmit;
-        Game.Instance.Players[0].InputHandler.OnUICancel += HandleUICancel;
-        
+        SubscribePlayerEvents(Game.Instance.Players[0]);
         _game.OnPlayerJoinedGame += HandlePlayerJoined;
         
         _game.SetJoiningEnabled(true);
@@ -62,9 +59,12 @@ public class ColorSelector : MonoBehaviour
                 break;
         }
         
-        Game.Instance.Players[index].InputHandler.OnUINavigate += HandleUINavigate;
-        Game.Instance.Players[index].InputHandler.OnUISubmit += HandleUISubmit;
-        Game.Instance.Players[index].InputHandler.OnUICancel += HandleUICancel;
+        SubscribePlayerEvents(Game.Instance.Players[index]);
+    }
+
+    private void HandlePlayerUnjoined(Player player)
+    {
+        UnsubscribePlayerEvents(player);
     }
 
     public void NavRight(int playerIndex, int currentIndex)
@@ -140,12 +140,28 @@ public class ColorSelector : MonoBehaviour
         if (Game.Instance == null)
             return;
         
+        _game.OnPlayerJoinedGame -= HandlePlayerJoined;
+        
         foreach (var player in Game.Instance.Players)
         {
-            player.InputHandler.OnUINavigate -= HandleUINavigate;
-            player.InputHandler.OnUISubmit -= HandleUISubmit;
-            player.InputHandler.OnUICancel -= HandleUICancel;
+            UnsubscribePlayerEvents(player);
         }
+    }
+
+    private void SubscribePlayerEvents(Player player)
+    {
+        player.InputHandler.OnUINavigate += HandleUINavigate;
+        player.InputHandler.OnUISubmit += HandleUISubmit;
+        player.InputHandler.OnUICancel += HandleUICancel;
+        player.OnUnjoined += HandlePlayerUnjoined;
+    }
+
+    private void UnsubscribePlayerEvents(Player player)
+    {
+        player.InputHandler.OnUINavigate -= HandleUINavigate;
+        player.InputHandler.OnUISubmit -= HandleUISubmit;
+        player.InputHandler.OnUICancel -= HandleUICancel;
+        player.OnUnjoined -= HandlePlayerUnjoined;
     }
     
     private void HandleUINavigate(int playerIndex, Vector2 dir)

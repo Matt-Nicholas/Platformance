@@ -28,6 +28,8 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.3.0/InputSystem/Controls/ButtonControl.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.3.0/InputSystem/Controls/CommonUsages.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.3.0/InputSystem/Controls/DiscreteButtonControl.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.3.0/InputSystem/Plugins/PlayerInput/PlayerInput.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.inputsystem@1.3.0/InputSystem/Plugins/PlayerInput/PlayerInputManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.6.4/Editor/Actions/IAction.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.6.4/Editor/Window/TimelineWindowAnalytics.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.toolchain.win-x86_64-linux-x86_64@2.0.4/Editor/Unity.Toolchain.cs" root0="SKIP_HIGHLIGHTING" />
@@ -78,10 +80,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="2816">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="27160">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="2816" />
+      <option name="pid" value="27160" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -99,71 +101,17 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GameControl/Tournament.cs</url>
-          <line>52</line>
-          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\GameControl\Tournament.cs" initialLine="54" containingFunctionPresentation="method 'HandleStageCompleted'">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/SelectorButton.cs</url>
+          <line>22</line>
+          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\SelectorButton.cs" initialLine="22" containingFunctionPresentation="method 'TrySelect'">
             <startOffsets>
-              <option value="1284" />
+              <option value="497" />
             </startOffsets>
             <endOffsets>
-              <option value="1300" />
+              <option value="512" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/GameControl/Tournament.cs</url>
-          <line>27</line>
-          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\GameControl\Tournament.cs" initialLine="27" containingFunctionPresentation="method 'PopulateStageList'">
-            <startOffsets>
-              <option value="640" />
-            </startOffsets>
-            <endOffsets>
-              <option value="677" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Stage/ColorBlockStage.cs</url>
-          <line>15</line>
-          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\Stage\ColorBlockStage.cs" initialLine="15" containingFunctionPresentation="method 'Awake'">
-            <startOffsets>
-              <option value="366" />
-            </startOffsets>
-            <endOffsets>
-              <option value="391" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Stage/ColorBlockStage.cs</url>
-          <line>32</line>
-          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\Stage\ColorBlockStage.cs" initialLine="31" containingFunctionPresentation="method 'HandleBlockClaimed'">
-            <startOffsets>
-              <option value="821" />
-            </startOffsets>
-            <endOffsets>
-              <option value="841" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Blocks/SequenceBlock.cs</url>
-          <line>26</line>
-          <properties documentPath="D:\Personal\Platformance\Platformance\Assets\Scripts\Blocks\SequenceBlock.cs" initialLine="26" containingFunctionPresentation="method 'PrevousBlockIsColored'">
-            <startOffsets>
-              <option value="568" />
-              <option value="590" />
-            </startOffsets>
-            <endOffsets>
-              <option value="589" />
-              <option value="602" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="44" />
+          <option name="timeStamp" value="55" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

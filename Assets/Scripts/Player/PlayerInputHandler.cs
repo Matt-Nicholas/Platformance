@@ -9,19 +9,14 @@ public class PlayerInputHandler : MonoBehaviour
     public Action<int> OnUISubmit;
     public Action<int> OnUICancel;
     
-    [HideInInspector] public int playerIndex;
     public InputDevice device;
 
-    private PlayerController _playerController;
+    [SerializeField] private Player _player;
+    [SerializeField] private PlayerController _playerController;
     private Vector2 _directionalInput;
     private bool _isBoosting;
     private const float UiNavDelay = .08f;
     private float _uiNavDelayTimer;
-    
-    private void Awake()
-    {
-        _playerController = GetComponent<PlayerController>();
-    }
 
     private void Update()
     {
@@ -33,9 +28,18 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
+    public void ResetInputValues()
+    {
+        _directionalInput = Vector2.zero;
+        _isBoosting = false;
+        _uiNavDelayTimer = 0;
+        
+        _playerController.ResetMovementValues();
+    }
+    
     public void OnMove(InputValue value)
     {
-        Debug.Log($"OnMove - player: {playerIndex}");
+        Debug.Log($"OnMove - player: {_player.Index}");
         if(!_playerController.PlayerCanMove)
             return;
         _directionalInput = value.Get<Vector2>();
@@ -67,19 +71,19 @@ public class PlayerInputHandler : MonoBehaviour
         _uiNavDelayTimer = UiNavDelay;
         
         var dir = value.Get<Vector2>();
-        OnUINavigate?.Invoke(playerIndex, dir);
+        OnUINavigate?.Invoke(_player.Index, dir);
         
     }
     
     public void OnSubmit(InputValue value)
     {
         if(value.isPressed)
-            OnUISubmit?.Invoke(playerIndex);
+            OnUISubmit?.Invoke(_player.Index);
     }
     
     public void OnCancel(InputValue value)
     {
         if(value.isPressed)
-            OnUICancel?.Invoke(playerIndex);
+            OnUICancel?.Invoke(_player.Index);
     }
 }

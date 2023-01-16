@@ -3,8 +3,8 @@
 public class Controller2D : RaycastController
 {
     public float maxSlopeAngle = 80;
-    [HideInInspector] public Vector2 playerInput;
     public CollisionInfo collisions;
+    [HideInInspector] public Vector2 playerInput;
 
     public override void Start()
     {

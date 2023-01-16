@@ -41,7 +41,7 @@ public class Game : MonoBehaviour
 
     public void StartTournament()
     {
-        _tournament = new Tournament(2);
+        _tournament = new Tournament(1);
         _tournament.StartTournament();
     }
 
@@ -56,11 +56,12 @@ public class Game : MonoBehaviour
     {
         playerInput.transform.SetParent(_playersContainer);
         
-        var player = playerInput.GetComponent<Player>();
         var index = Players.Count;
+        var player = playerInput.GetComponent<Player>();
+        player.Index = index;
         var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
         inputHandler.device = playerInput.devices[0];
-        inputHandler.playerIndex = index;
+        
         Players.Add(player);
         
         OnPlayerJoinedGame?.Invoke(index);
@@ -92,7 +93,8 @@ public class Game : MonoBehaviour
     {
         for (int i = 1; i < Players.Count; i++)
         {
-            Destroy(Players[i]);
+            Destroy(Players[i].gameObject);
+            Players.RemoveAt(i);
         }
         Players[0].SetupForUI();
         SceneManager.LoadScene("MainMenu");
